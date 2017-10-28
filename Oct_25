@@ -1,0 +1,68 @@
+https://www.hackerrank.com/challenges/average-population-of-each-continent?h_r=next-challenge&h_v=zen
+
+select country.continent,round(avg(city.population)-0.5) from country join city on country.code = city.countrycode group by country.continent;
+
+Question 1: SQL Query to find second highest salary of Employee
+
+select max(salary) from employee where salary not in (select max(salary) from employee);
+
+Question 2: SQL Query to find Max Salary from each department.
+
+select max(salary) from employee group by department;
+
+
+http://artoftesting.com/interviewSection/sql-queries-for-interview.html
+
+1. select count(emp)id) from employeesalary where project = 'P1';
+2. select fullname from employeedetails d join employeesalary s on 
+   d.empid = s.empid and s.salary in between 5000 and 1000;
+3. select count(empid) from employeesalary group by project order by count(empid) desc;
+5. select fullname from employeedetails d, s.emplyeesalary from employeedetails e left join employee salary on 
+   d.empid = s.empid;
+6. select e.fullname from employee e join employee m on
+   e. managerid = m.empid;
+7. select * from empdetails where exists (select salary from employeesalary where e.empid = s.empid); 
+8. select empid,project,salary,count(*) from employee group by empid having count(*) > 1; # fetch duplicate values
+9. delete from employeeesalary where empid in (select empid from employeesalary group by salary having count(*) > 1)
+10. select e.empid,e.project,e.salary from (select *,row_number() over (order by emp_d) as rownumber from employeesalary) E where
+    E.rownumber % 2 =0;
+11. select * into newtable from empdetails;
+
+13. select salary ,rownumber() over (order by salary desc) as rownumber from empsalary where rownumber <=3;
+
+14.  select salary ,rank() over (order by salary desc) as ranknumber from empsalary where ranknumber <=3;
+15. Top X records from each group
+
+select * from (select *,rank() over (partition by emp_main category order by sub_category asc) as rankid)E
+where E.rankid < 3;
+                         
+16. Duplicate records from a table
+
+select *,count(*) as counter group by  emp_id having counter >1;
+
+17. remove duplicate values
+delete from emp where emp_id in( select *,count(*) group by emp_id having count(*) >1 );
+
+To fetch ALTERNATE records from a table. (EVEN NUMBERED)
+
+select * from (select *,rownumber() over (group by sumthn orderby sumthn) as rownum from employee)E when E.rownum % 2=0;
+
+Q)List dept no., Dept name for all the departments in which there are no employees in the department.
+select dept_no,dept name from dept where dept_id not in (select dept_id from emp) 
+
+q) Select all records where dept no of both emp and dept table matches.
+
+select * from emp where exists( select * from dept where emp.dept_n = dept.dept_n);
+
+
+
+
+
+
+
+
+
+
+
+
+

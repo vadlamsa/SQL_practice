@@ -1,0 +1,94 @@
+1 ) Employee and Manager ID are in the same table; can you get manager names for employees?
+
+select e.empname, m.empname from employee e join employee m on
+e.managerid = m.empid;
+
+2) Q2 Can you get employee details whose department id is not valid or department id not present in department table?
+
+select * from employee e where not exists (select deptid from dept d where e.deptd = d.deptid);
+
+select * from employee e where deptid not in (select deptid from dept);
+
+3)  Can you get the list of employees with same salary? 
+
+select empname from employee e1 join employee e2
+on e1.salary = e2.salary and e1.empid != e2.empid;
+
+4) How can you find duplicate records in Employee table?
+
+select *,count(*) from emp group by empid having count(*) > 1;
+
+5)How can you delete duplicate records?
+
+delete * from emp where empid in(select *,count(*) from emp group by empid having count(*) > 1);
+
+delete * from emp where empid in (select empid , rownumber() over (order by empid) as rownum from emp)E
+where E.rownum > 1;
+
+6) Find the second highest salary.  
+
+select max(salary) from emp where empid not in (select max(salary) from emp);
+
+7) Now, can you find 3rd, 5th or 6th i.e. N'th highest Salary?
+
+select * from emp rank () over (order by salary desc) as ranknum where ranknum > n-1;
+
+8)  Can you write a query to find employees with age greater than 30? 
+
+select * from emp where date_part('year',age(now(),dob) > 30;
+
+9)  Please write a query to get the maximum salary from each department. 
+
+select max(salary) from emp group by dptId;
+
+10)  Can you write a query to get employee names starting with a vowel?
+
+select * from emp where empname like '[aeiou]%';
+
+11) Can you write a query to get employee names ending with a vowel? 
+
+select * from emp where empname like '%[aeiou]';
+
+12) Can you write a query to get employee names starting and ending with a vowel?
+
+select * from emp where name like '[aeiou]%[aeiou]';
+
+13)Get 5 Employees from every Department getting highest salary (EmpID, DeptID, Salary)
+
+select empname , rank() over (partition by dept_id order by salary desc) as ranknum where ranknum <6;
+
+14)  For these 2 tables: Product(ProductID, ProductName), Sales(SalesOrderID, ProductID, SaleDate)
+- Get the list of Products that were sold last year.
+- Get the list of Products that were NOT sold last year.
+select productname,productid from product join sales on product.productid = sales.productid
+where saledate > (current_date - interval '1 year');
+
+15) Can you write an SQL query to show Employee (names) who have a bigger salary than their manager.
+
+select name,salary from emp e join emp m on e.mngid = m.empid where e.salary > m.salary;
+
+16) Write an SQL query to find Employees who have the biggest salary in their Department?
+
+select max(salary),empname group by dept_id;
+
+17) Write an SQL query to list Departments that have less than 3 people in it?
+
+select dept_id, count(emp_id) over (partition by dept_id) as counter from departments where counter < 3;
+
+18)Write an SQL query to show all Departments along with the number of people there?
+
+select depname ,count(emp_id) over(partition by dept_id) as counts from departments;
+
+19) Can you write an SQL query to show all Employees that don't have a manager in the same department?
+
+select empname from emp e join emp m on e.mng_id = m.emp_id where e.dept_id != m.dept_id;
+
+20) List of employees who are not managers
+
+select empname from employee where emp_id is not in (select manager_id from employee and manager_id is not null);
+
+
+
+
+
+

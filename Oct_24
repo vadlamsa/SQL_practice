@@ -1,0 +1,62 @@
+"""
+TABLE 1: PARENTS -> (INT ID, INT AGE)
+TABLE 2: CHILDREN -> (INT ID, INT AGE, INT PARENT_ID)
+GET THE PARENT ID, HIS/HER OLDEST AND YOUNGEST CHILDREN IDS.
+"""
+
+select parent_id, min(age),max(age) from children group by parent_id;
+
+"""
+QUESTION 2 : YOU ARE GIVEN FOLLOWING TWO TABLES,
+CUSTOMER{CUST_ID, CUST_NAME, ...<OTHER CUSTOMER RELATED DETAILS>}
+ORDER{ORDER_ID, ORDER_NAME, CUST_ID, ...<OTHER ORDER RELATED DETAILS>}
+
+YOU HAVE TO PROVIDE THE OUTPUT IN FOLLOWING FORMAT.
+CUST_ID, CUST_NAME, [TOTAL AMOUNT OF ORDERS]
+
+PLEASE NOTE THAT YOU HAVE TO DO THIS IN SQL/SCOPE, AND PRINT ONLY THOSE CUSTOMER WHO HAVE AT LEAST ONE ORDER.
+"""
+select c.cust_id,c.cust_name, count(order_id) as 'Total amount of orders' from customer c join order o
+on c.cust_id = o.cust_id group by c.cust_id;
+
+
+"""
+ 1. iF WE HAVE 2 COLUMN IN TABLE, USER ID AND DATE WHICH USER HAS LOGGED IN. hOW CAN WE FIND THE USER ID WHO HAS LOGGED IN MOST. MEANS MAX NUMBER OF TIME.
+"""
+select user_id from table where count(date) = (select count(date) as 'count' from table group by user_id order by count desc limit 1);
+
+"""
+WRITE A QUERY WHICH RETURN 5 PERSONS WHO HAD SPENT MOST FROM A TABLE AND TABLE CONTAINS CUSTOMER ID, PRODUCT ID AND EXPENSES. CUSTOMER ID CAN BE DUPLICATE.
+"""
+select customer_id from table where customer_id in (select customer_id,sum(expenses) from table group by customer_id order by sum(expenses) desc limit 5);
+
+"""
+SUPPOSE THAT WEB SITE HAS TWO DATA TABLES: ONE IS THE CUSTOMER TABLE. THE OTHER IS THE ORDER TABLE. HOW DO YOU FIND THE CUSTOMERS WHO NEVER ORDER ANYTHING?
+"""
+select customer_name from customer c left join order o
+on c.cust_id = o.cust_id AND o.cust_id is null;
+
+"""
+GIVEN TWO TABLES
+1. CANDIDATE HAVING: ID , NAME
+2. VOTE: ID, CANDIDATEID
+GIVE QUERY TO GIVE THE NAME OF THE WINNING CANDIDATE
+"""
+select name from candidate c join vote v on
+c.id = v.candidateid where id in 
+(select candidateId,count(id) from vote group by candidateId order by count desc limit 1)
+
+"""
+TWO TABLES. COUNTRY AND CITY
+COUNTRY --> COUNTRYID, COUNTRY NAME
+CITY --> COUNTRYID, CITY NAME
+1. HOW DO YOU GET THE COUNTRIES THAT HAS NO CITIES?
+2. HOW DO YOU GET THE COUNTRIES THAT HAS LESS THAN 3 CITIES AND ALSO MAKE SURE THE COUNTRIES WITH NO CITIES ALSO SHOW UP.
+"""
+1. select country name from country join on 
+country.countryid = city.countryid
+and city.countryid is null;
+
+2. select country name from country join on 
+country.countryid = city.countryid
+where country name in (select country name, count(city) as count from country group by country_name having count in(0,1,2));
